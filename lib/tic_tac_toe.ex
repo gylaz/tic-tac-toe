@@ -1,14 +1,11 @@
 defmodule TicTacToe do
   require Integer
 
-  defmodule X do end
-  defmodule Y do end
-
   defmodule Grid do
     defstruct turns: 0, cells: Enum.map(1..9, fn(_) -> nil end)
   end
 
-  def place(%Grid{turns: turns}, X, _) when Integer.odd?(turns) do
+  def place(%Grid{turns: turns}, :x, _) when Integer.odd?(turns) do
     {:error, "out of turn token"}
   end
 
