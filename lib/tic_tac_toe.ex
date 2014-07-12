@@ -1,14 +1,11 @@
 defmodule TicTacToe do
   require Integer
 
-  defmodule X do end
-  defmodule Y do end
-
   defmodule Grid do
     defstruct turns: 0, cells: Enum.map(1..9, fn(_) -> nil end)
   end
 
-  def place(%Grid{turns: turns}, X, _) when Integer.odd?(turns) do
+  def place(%Grid{turns: turns}, :x, _) when Integer.odd?(turns) do
     {:error, "out of turn token"}
   end
 
@@ -27,7 +24,7 @@ defmodule TicTacToe do
   def winner(grid) do
     rows = Enum.chunk(grid.cells, 3)
     columns = columns_from_grid(grid)
-    diagonals = []
+    diagonals = diagonals_from_grid(grid)
 
     winner_in_cells(rows) || winner_in_cells(columns) || winner_in_cells(diagonals)
   end
@@ -49,5 +46,12 @@ defmodule TicTacToe do
         Enum.map(0..2, fn(j) -> Enum.at(grid.cells, i + j * 3) end)
       end
     )
+  end
+
+  defp diagonals_from_grid(grid) do
+    left_to_right_diagonal = Enum.map(0..2, fn(i) -> Enum.at(grid.cells, i * 4) end)
+    right_to_left_diagonal = Enum.map(1..3, fn(i) -> Enum.at(grid.cells, i * 2) end)
+
+    [left_to_right_diagonal, right_to_left_diagonal]
   end
 end
